@@ -46,10 +46,11 @@ public:
 	PackageStatus			m_status;
 	char					m_realFileName[128];
 	void*					m_pLoadedFile;
+	size_t					m_fileSize;
 	PakHeader				m_hdr;
 	uint32_t				m_pageHdrs[LoadingHeap::kMaxPages];
 	int						m_currentPageIdx;
-	uint32_t				m_textureBaseOffset;
+	size_t					m_textureBaseOffset;
 };
 
-bool Login(ResItem* pResItem, ResPage* pResPage);
+bool Login(ResItem* pResItem, ResPage* pResPage, Package* pPackage);

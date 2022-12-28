@@ -17,6 +17,25 @@ void Geometry1::DumpInfo(uint8_t* pMem)
 					printf("name: %s\n", pSubMeshDesc->m_name);
 				}
 			}
+
+			int32_t numMaterialInst = pGeo->m_numShaders;
+			for(int32_t iMaterialInst = 0; iMaterialInst < numMaterialInst; iMaterialInst++)
+			{
+				
+				MaterialInstanceDesc* pMatDesc = &pGeo->m_aMaterialInstanceDesc[iMaterialInst];
+				/*
+				printf("MATERIAL %s\n", pMatDesc->m_materialDebugName);
+				printf("FILE %s\n", pMatDesc->m_materialFile);
+				printf("MATERIAL HASH %s\n", pMatDesc->m_materialHash);
+				*/
+				uint32_t cap = pMatDesc->field_38;
+				printf("[MatDump]|%s|%s|%s|%d|", pMatDesc->m_materialDebugName, pMatDesc->m_materialFile, pMatDesc->m_materialHash, cap);
+				for (uint32_t i = 0; i < cap; i++)
+				{
+					printf("|%d| %s\n", i, pMatDesc->m_paUnknames[i]);
+				}
+				puts("-----------------");
+			}
 		}
 	}
 }

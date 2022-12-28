@@ -9,6 +9,7 @@
 
 #include "../pak-entries/spawner-group.h"
 #include "../pak-entries/geometry.h"
+#include "../pak-entries/texture-dictionary.h"
 #include "../utils/stringid.h"
 
 #include <immintrin.h>
@@ -41,6 +42,7 @@ Package::Package(const char* pakName)
 {
 	m_pLoadedFile = nullptr;
 	m_currentPageIdx = 0;
+	m_fileSize = 0;
 	m_status = PackageStatus::kPackageStatusEmpty;
 	m_textureBaseOffset = 0;
 	FILE* fh;
@@ -49,6 +51,7 @@ Package::Package(const char* pakName)
 	{
 		fseek(fh, 0x0, SEEK_END);
 		size_t fsize = ftell(fh);
+		m_fileSize = fsize;
 		fseek(fh, 0x0, SEEK_SET);
 		void* pFile = malloc(fsize);
 		if (pFile)
@@ -92,7 +95,7 @@ int Package::PackageLogin()
 				case PackageStatus::kPackageStatusLoadingPakHeader:
 				{
 					uint32_t magic = ReadU32(&pHdr->m_magic);
-					if (magic == 0xA79)
+					if (magic == 0xA79 || magic == 0x10A79) //normal pak or -dict.pak
 					{
 						if (ReadU32(&pHdr->m_pageCt) < LoadingHeap::kMaxPages)
 						{
@@ -112,7 +115,7 @@ int Package::PackageLogin()
 #endif
 								pCurrentPage++;
 							}
-							m_textureBaseOffset = m_hdr.m_hdrSize + m_hdr.m_pageCt << 19;
+							m_textureBaseOffset =  m_fileSize - pHdr->m_dataSize;
 							m_status = PackageStatus::kPackageStatusLoadingPages;
 						}
 						else
@@ -150,7 +153,7 @@ int Package::PackageLogin()
 							//add       r11, r11, r8
 							ResItem* pResItem = reinterpret_cast<ResItem*>(ReadU32(&pPageEntry->m_resItemOffset) + reinterpret_cast<uint8_t*>(pCurrentPageHdr));
 #ifdef _DEBUG
-							printf("=============> ResItemOffset: 0x%08X\n", reinterpret_cast<uintptr_t>(pResItem) - g_fileBase);
+							printf("=============> ResItemOffset: 0x%08llX\n", reinterpret_cast<uintptr_t>(pResItem) - g_fileBase);
 #endif
 							//ld        r0, 0(r11) 
 							//stw       r0, 0(r11)   
@@ -204,9 +207,9 @@ int Package::PackageLogin()
 						ResPage* pPage = reinterpret_cast<ResPage*>(reinterpret_cast<uint8_t*>(m_pLoadedFile) + m_pageHdrs[pageIdx]);
 						ResItem* pItem = reinterpret_cast<ResItem*>(reinterpret_cast<uint8_t*>(pPage) + itemOffset);
 #ifdef _DEBUG
-						printf("=============> ResItemOffset: 0x%08X\n", reinterpret_cast<uintptr_t>(pItem) - g_fileBase);
+						printf("=============> ResItemOffset: 0x%08llX\n", reinterpret_cast<uintptr_t>(pItem) - g_fileBase);
 #endif
-						Login(pItem, pPage);
+						Login(pItem, pPage, this);
 						pEntry++;
 					}
 					return 1;
@@ -319,7 +322,7 @@ void Package::FixPointers()
 }
 
 
-bool Login(ResItem* pResItem, ResPage* pResPage)
+bool Login(ResItem* pResItem, ResPage* pResPage, Package* pPackage)
 {
 	StringId typeId = SID(reinterpret_cast<const char*>(pResItem->m_itemTypeOffset));
 	switch (typeId)
@@ -333,6 +336,12 @@ bool Login(ResItem* pResItem, ResPage* pResPage)
 		case 0xD97F2C44: //SID("GEOMETRY_1")
 		{
 			Geometry1::DumpInfo(reinterpret_cast<uint8_t*>(pResItem) + 0x20);
+			break;
+		}
+
+		case 0xE1B4938D: //SID("TEXTURE_DICTIONARY")
+		{
+			TextureDictionary::DumpInfo(reinterpret_cast<uint8_t*>(pResItem) + 0x20, pPackage);
 			break;
 		}
 
