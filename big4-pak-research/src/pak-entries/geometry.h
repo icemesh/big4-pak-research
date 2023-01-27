@@ -85,16 +85,16 @@ namespace Geometry1
 		const char* m_materialFile;
 		const char** m_paUnknames;
 		const char* m_materialHash;
-		void* m_unkPtr2;
-		uint32_t field_28;
-		uint32_t field_2C;
-		uint32_t field_30;
-		uint32_t field_34;
+		void* m_unkPtr; //elemSize_0x18
+		void* m_unkPtr2; //elemSize_0x28
+		void* m_unkPtr3; //elemSize_0x20
 		uint32_t field_38;
 		uint32_t field_3C;
 		uint32_t field_40;
 		uint32_t m_numCbufferInfo;
-		uint8_t m_imLazy[0x88];
+		uint32_t m_unk;
+		uint32_t m_surfaceType; //StringId of the surface type eg: SID("stone-rough")
+		uint64_t m_imLazy[0x10];
 	};
 
 	void DumpInfo(uint8_t* pMem);
