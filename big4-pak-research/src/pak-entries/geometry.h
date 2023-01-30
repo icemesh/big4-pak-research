@@ -11,6 +11,7 @@ namespace Geometry1
 {
 	struct SubMeshDesc;
 	struct MaterialInstanceDesc;
+	struct StreamDesc;
 
 	struct GeometryDesc
 	{
@@ -25,7 +26,7 @@ namespace Geometry1
 		uint32_t					m_unk7;					///< <c>0x20</c>:
 		uint32_t					m_unk8;					///< <c>0x24</c>:
 		SubMeshDesc*				m_pSubMeshDescTable;	///< <c>0x28</c>:
-		void*						m_paCollection;			///< <c>0x30</c>:
+		void*						m_paCollection;			///< <c>0x30</c>: PrototypeDesc
 		void*						field_38;				///< <c>0x38</c>:
 		void*						field_40_elemSize_0x28;	///< <c>0x40</c>:
 		MaterialInstanceDesc*		m_aMaterialInstanceDesc;///< <c>0x48</c>:
@@ -46,21 +47,23 @@ namespace Geometry1
 		uint32_t		field_20;
 		int32_t			m_numVertexes;
 		int32_t			m_numIndexes;
-		uint32_t		field_2C;
+		uint32_t		m_numStreamSource;
 		int32_t			m_numDefaultStreams;
 		uint32_t		field_34;
-		float*			m_pVtxTable;
+		StreamDesc*		m_pStreamDesc;
 		uint32_t		field_40;
 		uint32_t		field_44;
 		uint16_t*		m_pIndexes;
-		uint32_t		field_50;
-		uint32_t		field_54;
+		//uint32_t		field_50;
+		//uint32_t		field_54;
+		void*			m_unkPtr;//material related
 		int32_t			m_numMaterialInstances;
 		uint32_t		field_5C;
 		uint32_t		field_60;
 		uint32_t		field_64;
-		uint32_t		field_68;
-		uint32_t		field_6C;
+		//uint32_t		field_68;
+		//uint32_t		field_6C;
+		void*			m_unkPtr2; //texture related
 		uint32_t		field_70;
 		uint32_t		field_74;
 		uint32_t		field_78;
@@ -71,13 +74,46 @@ namespace Geometry1
 		uint32_t		field_8C;
 		uint32_t		field_90;
 		uint32_t		field_94;
-		uint32_t		field_98;
-		uint32_t		field_9C;
+		//uint32_t		field_98;
+		//uint32_t		field_9C;
+		const char*		m_unkPtr3; 
 		uint32_t		field_A0;
 		uint32_t		field_A4;
-		uint32_t		field_A8;
-		uint32_t		field_AC;
+		//uint32_t		field_A8;
+		//uint32_t		field_AC;
+		const char*		m_unkPtr4;
 	};
+
+	//probably has more data...
+	struct FloatDesc
+	{
+		uint8_t m_unk;
+		uint8_t m_unk2;
+		uint8_t m_unk3;
+		uint8_t m_floatType; // 34 half || 6 
+	};
+
+	//0x18
+	struct StreamSource
+	{
+		FloatDesc*	m_unkPtr;
+		void*		m_pData; 
+		uint64_t	m_unkData;
+	};
+
+	//0x8 ? 
+	struct StreamDesc
+	{
+		uint8_t m_numAttributes;
+		uint8_t m_unk;
+		uint16_t m_stride;
+		uint8_t m_unk2;
+		uint8_t m_unk3;
+		uint16_t m_unk4;
+		StreamSource m_aStreamSources[];
+	};
+
+
 
 	struct MaterialInstanceDesc//0xD0
 	{
