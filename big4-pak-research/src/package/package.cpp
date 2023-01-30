@@ -328,19 +328,19 @@ bool Login(ResItem* pResItem, ResPage* pResPage, Package* pPackage)
 	StringId typeId = SID(reinterpret_cast<const char*>(pResItem->m_itemTypeOffset));
 	switch (typeId)
 	{
-		case 0x4B60B220:
+		case SID("SPAWNER_GROUP"):
 		{
 			EntitySpawnerGroup::DumpInfo(reinterpret_cast<uint8_t*>(pResItem) + 0x20);
 			break;
 		}
 		
-		case 0xD97F2C44: //SID("GEOMETRY_1")
+		case SID("GEOMETRY_1"):
 		{
 			Geometry1::DumpInfo(reinterpret_cast<uint8_t*>(pResItem) + 0x20);
 			break;
 		}
 
-		case 0xE1B4938D: //SID("TEXTURE_DICTIONARY")
+		case SID("TEXTURE_DICTIONARY"):
 		{
 			TextureDictionary::DumpInfo(reinterpret_cast<uint8_t*>(pResItem) + 0x20, pPackage);
 			break;

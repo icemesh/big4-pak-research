@@ -95,7 +95,6 @@
     <ClCompile Include="src\pak-entries\spawner-group.cpp" />
     <ClCompile Include="src\pak-entries\texture-dictionary.cpp" />
     <ClCompile Include="src\utils\sidbase\sidbase.cpp" />
-    <ClCompile Include="src\utils\stringid.cpp" />
     <ClCompile Include="src\utils\utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
