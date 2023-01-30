@@ -53,9 +53,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\stringid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\pak-entries\spawner-group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
