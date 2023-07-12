@@ -10,6 +10,8 @@
 #include "../pak-entries/spawner-group.h"
 #include "../pak-entries/geometry.h"
 #include "../pak-entries/texture-dictionary.h"
+#include "../pak-entries/texture-table.h"
+#include "../pak-entries/havok-data.h"
 #include "../utils/stringid.h"
 
 #include <immintrin.h>
@@ -269,52 +271,6 @@ void Package::FixPointers()
 			//addi      r7, r7, 8
 			pEntry++;
 		}
-		/*
-		* old code this only works if there's only one PointerFixUpPage
-		do{
-			uint32_t numloginPageEntries = pLoginPage->m_numLoginPageEntries;
-			if (numloginPageEntries != 0)
-			{
-				uint32_t startOffset = pLoginPage->m_dataOffset;
-
-				PointerFixUpPageEntry* pEntry = reinterpret_cast<PointerFixUpPageEntry*>(reinterpret_cast<uint8_t*>(m_pLoadedFile) + startOffset);
-				if (numloginPageEntries > 0)
-				{
-					uint32_t innerCounter = 0;
-					do {
-						//lhz       r9, 0(r7)
-						uint16_t page1Idx = pEntry->m_page1Idx;
-						//lhz       r11, 2(r7)
-						uint16_t page2Idx = pEntry->m_page2Idx;
-						//lwz       r10, 4(r7)
-						uint32_t unkData = pEntry->m_offset;
-						//lwzx      r8, r5, r9
-						uint8_t* pPage1 = reinterpret_cast<uint8_t*>(m_pLoadedFile) + m_pageHdrs[page1Idx];
-						//lwzx      r9, r5, r11
-						uint8_t* pPage2 = reinterpret_cast<uint8_t*>(m_pLoadedFile) + m_pageHdrs[page2Idx];
-						//add       r10, r10, r8
-						pPage1 += unkData;
-						//lwz       r0, 0(r10)
-
-#ifdef _DEBUG
-						printf("tmp: 0x%08X\n", ReadU32(pPage1));
-#endif
-
-						//add       r0, r0, r9
-						pPage2 += ReadU32(pPage1);
-						//stw       r0, 0(r10)
-						*reinterpret_cast<uintptr_t*>(pPage1) = reinterpret_cast<uintptr_t>(pPage2);
-						//addi      r7, r7, 8
-						pEntry++;
-						//addi      r0, r6, 1
-						innerCounter++;
-					} while (innerCounter < numloginPageEntries);
-				}
-			}
-			counter++;
-			pLoginPage++;
-		} while (counter < numLoginPages);
-		*/
 	}
 	else
 	{
@@ -346,9 +302,22 @@ bool Login(ResItem* pResItem, ResPage* pResPage, Package* pPackage)
 			break;
 		}
 
+		case SID("TEXTURE_TABLE"):
+		{
+			TextureTable::DumpInfo(reinterpret_cast<uint8_t*>(pResItem) + 0x20, pPackage);
+			break;
+		}
+
+		case SID("COLLISION_DATA_HAVOK_BG"):
+		{
+			HavokLoadPackfile(reinterpret_cast<HavokBackgroundCollisionData*>(reinterpret_cast<uint8_t*>(pResItem) + 0x20));
+			break;
+		}
+
 		default:
 		{
-			printf("Found #%.08X -> %s\n", typeId, reinterpret_cast<const char*>(pResItem->m_itemTypeOffset));
+			//printf("Found #%.08X -> %s\n", typeId, reinterpret_cast<const char*>(pResItem->m_itemTypeOffset));
+			printf("\x1B[0;31mFound: %s -> 0x%08X\x1B[m\n", reinterpret_cast<const char*>(pResItem->m_itemTypeOffset), typeId);
 			break;
 		}
 	};

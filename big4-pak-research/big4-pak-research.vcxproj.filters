@@ -42,6 +42,12 @@
     <ClInclude Include="src\pak-entries\texture-dictionary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\pak-entries\texture-table.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pak-entries\havok-data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\package\package.cpp">
@@ -63,6 +69,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pak-entries\texture-dictionary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pak-entries\texture-table.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pak-entries\havok-data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -82,8 +82,10 @@
     <ClInclude Include="src\package\package-def.h" />
     <ClInclude Include="src\package\package.h" />
     <ClInclude Include="src\pak-entries\geometry.h" />
+    <ClInclude Include="src\pak-entries\havok-data.h" />
     <ClInclude Include="src\pak-entries\spawner-group.h" />
     <ClInclude Include="src\pak-entries\texture-dictionary.h" />
+    <ClInclude Include="src\pak-entries\texture-table.h" />
     <ClInclude Include="src\utils\sidbase\sidbase.h" />
     <ClInclude Include="src\utils\stringid.h" />
     <ClInclude Include="src\utils\utils.h" />
@@ -92,8 +94,10 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\package\package.cpp" />
     <ClCompile Include="src\pak-entries\geometry.cpp" />
+    <ClCompile Include="src\pak-entries\havok-data.cpp" />
     <ClCompile Include="src\pak-entries\spawner-group.cpp" />
     <ClCompile Include="src\pak-entries\texture-dictionary.cpp" />
+    <ClCompile Include="src\pak-entries\texture-table.cpp" />
     <ClCompile Include="src\utils\sidbase\sidbase.cpp" />
     <ClCompile Include="src\utils\utils.cpp" />
   </ItemGroup>
