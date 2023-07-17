@@ -37,51 +37,43 @@ namespace Geometry1
 	//ps4 vers
 	struct SubMeshDesc//0xB0; 
 	{
-		uint32_t		field_0;
-		uint32_t		field_4;
-		const char*		m_name;
-		uint32_t		field_10;
-		uint32_t		field_14;
-		uint32_t		field_18;
-		uint32_t		field_1C;
-		uint32_t		field_20;
-		int32_t			m_numVertexes;
-		int32_t			m_numIndexes;
-		uint32_t		m_numStreamSource;
-		int32_t			m_numDefaultStreams;
-		uint32_t		field_34;
-		StreamDesc*		m_pStreamDesc;
-		uint32_t		field_40;
-		uint32_t		field_44;
-		uint16_t*		m_pIndexes;
-		//uint32_t		field_50;
-		//uint32_t		field_54;
-		void*			m_unkPtr;//material related
-		int32_t			m_numMaterialInstances;
-		uint32_t		field_5C;
-		uint32_t		field_60;
-		uint32_t		field_64;
-		//uint32_t		field_68;
-		//uint32_t		field_6C;
-		void*			m_unkPtr2; //texture related
-		uint32_t		field_70;
-		uint32_t		field_74;
-		uint32_t		field_78;
-		uint32_t		field_7C;
-		uint32_t		field_80;
-		uint32_t		field_84;
-		uint32_t		field_88;
-		uint32_t		field_8C;
-		uint32_t		field_90;
-		uint32_t		field_94;
-		//uint32_t		field_98;
-		//uint32_t		field_9C;
-		const char*		m_unkPtr3; 
-		uint32_t		field_A0;
-		uint32_t		field_A4;
-		//uint32_t		field_A8;
-		//uint32_t		field_AC;
-		const char*		m_unkPtr4;
+		uint32_t				field_0;
+		uint32_t				field_4;
+		const char*				m_name;
+		uint32_t				field_10;
+		uint32_t				field_14;
+		uint32_t				field_18;
+		uint32_t				field_1C;
+		uint32_t				field_20;
+		int32_t					m_numVertexes;
+		int32_t					m_numIndexes;
+		uint32_t				m_numStreamSource;
+		int32_t					m_numDefaultStreams;
+		uint32_t				field_34;
+		StreamDesc*				m_pStreamDesc;
+		uint32_t				field_40;
+		uint32_t				field_44;
+		uint16_t*				m_pIndexes;
+		MaterialInstanceDesc*	m_pMaterialInstanceDesc;
+		int32_t					m_numMaterialInstances;
+		uint32_t				field_5C;
+		uint32_t				field_60;
+		uint32_t				field_64;
+		void*					m_unkPtr2; //texture related
+		uint32_t				field_70;
+		uint32_t				field_74;
+		uint32_t				field_78;
+		uint32_t				field_7C;
+		uint32_t				field_80;
+		uint32_t				field_84;
+		uint32_t				field_88;
+		uint32_t				field_8C;
+		uint32_t				field_90;
+		uint32_t				field_94;
+		const char*				m_unkPtr3; 
+		uint32_t				field_A0;
+		uint32_t				field_A4;
+		const char*				m_unkPtr4;
 	};
 
 	//probably has more data...
@@ -113,24 +105,48 @@ namespace Geometry1
 		StreamSource m_aStreamSources[];
 	};
 
+	struct ShaderVariable //0x18
+	{
+		const char*		m_variableName;	///< <c>0x00</c>: Name of the variable
+		void*			m_pData;		///< <c>0x08</c>: pointer to the data of the variable
+		std::uint64_t	m_unk;			///< <c>0x10</c>:
+	};
 
+	struct ShaderTextureDesc
+	{
+		const char*		m_textureFilePath;	///< <c>0x00</c>: z:/big4/build/main/common/texture4/art/levels/sky/textures/ etc...
+		uint64_t		m_uid;				///< <c>0x08</c>: this must match the m_uid that we find in the TEXTURE_TABLE entry
+		std::uint64_t	field_10;			///< <c>0x10</c>: always 0 ? 
+		std::uint64_t	field_18;			///< <c>0x18</c>: always 0 ? 
+		std::uint64_t	field_20;			///< <c>0x20</c>: always 0 ? 
+	};
+
+	struct ShaderTexture
+	{
+		const char*			m_shaderTextureName;	///< <c>0x00</c>: eg: g_tColorMap 
+		const char*			m_textureName;			///< <c>0x08</c>: eg: art/general/textures/default/default-grid-gray-scale.tga
+		ShaderTextureDesc*	m_pShaderTextureDesc;	///< <c>0x10</c>: 
+		std::uint32_t		m_index;				///< <c>0x18</c>: always 0 ?
+		std::uint32_t		field_1C;				///< <c>0x1C</c>: always -1 ?
+		std::uint64_t		field_20;				///< <c>0x20</c>: always 0 ?
+	};
 
 	struct MaterialInstanceDesc//0xD0
 	{
-		const char* m_materialDebugName;
-		const char* m_materialFile;
-		const char** m_paUnknames;
-		const char* m_materialHash;
-		void* m_unkPtr; //elemSize_0x18
-		void* m_unkPtr2; //elemSize_0x28
-		void* m_unkPtr3; //elemSize_0x20
-		uint32_t field_38;
-		uint32_t field_3C;
-		uint32_t field_40;
-		uint32_t m_numCbufferInfo;
-		uint32_t m_unk;
-		uint32_t m_surfaceType; //StringId of the surface type eg: SID("stone-rough")
-		uint64_t m_imLazy[0x10];
+		const char*		m_materialDebugName;	///< <c>0x00</c>: 
+		const char*		m_materialFile;			///< <c>0x08</c>: 
+		const char**	m_apShaderFeatures;		///< <c>0x10</c>: 
+		const char*		m_materialHash;			///< <c>0x18</c>: 
+		ShaderVariable* m_aShaderVariables;		///< <c>0x20</c>: 
+		ShaderTexture*	m_aShaderTextures;		///< <c>0x28</c>: 
+		void*			m_unkPtr3;				///< <c>0x30</c>: 
+		uint32_t		m_numShaderFeatures;	///< <c>0x38</c>: 
+		uint32_t		m_numShaderVariables;	///< <c>0x3C</c>: 
+		uint32_t		m_numShaderTextures;	///< <c>0x40</c>: 
+		uint32_t		m_numCbufferInfo;		///< <c>0x44</c>: 
+		uint32_t		m_unk;					///< <c>0x48</c>: 
+		uint32_t		m_surfaceType;			///< <c>0x4C</c>: StringId of the surface type eg: SID("stone-rough")
+		uint64_t		m_imLazy[0x10];			///< <c>0x50</c>: 
 	};
 
 	void DumpInfo(uint8_t* pMem);

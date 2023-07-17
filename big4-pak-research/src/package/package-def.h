@@ -18,8 +18,8 @@ struct PakHeader //size 0x2C
 	uint32_t m_numPointerFixUpPages;	//0x18 always 0x8
 	uint32_t m_pointerFixUpTableOffset; //0x1C ptr to the PointerFixUpTable table
 	uint32_t m_dataSize;				//0x20 size of the data from the end of the last page to the EOF
-	uint32_t m_unk6;					//0x24 no idea
-	uint32_t m_unk7;					//0x28 no idea
+	uint32_t m_vramDescTablePageIdx;	//0x24 page idx where the VramDescTable is stored
+	uint32_t m_vramDescTableOffset;		//0x28 m_pageHdrs[m_vramDescTablePageIdx] + m_vramDescTableOffset = ResItem
 };
 //ok
 struct PakPageEntry //0xC 

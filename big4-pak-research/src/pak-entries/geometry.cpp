@@ -14,19 +14,6 @@ void Geometry1::DumpInfo(uint8_t* pMem)
 				for (int32_t iSubMeshDesc = 0; iSubMeshDesc < numSubMeshDesc; iSubMeshDesc++)
 				{
 					SubMeshDesc* pSubMeshDesc = &pGeo->m_pSubMeshDescTable[iSubMeshDesc];
-					/*
-					StreamDesc* pDesc = pSubMeshDesc->m_pStreamDesc;
-					uint32_t numStreamSource = pSubMeshDesc->m_numStreamSource;
-					
-					StreamSource* pSrc = pDesc->m_aStreamSources;
-					
-					for (uint32_t iSource = 0; iSource < numStreamSource; iSource++)
-					{
-						FloatDesc* pDesc = pSrc->m_unkPtr;
-						printf("pDec->m_floatType: %d\n", pDesc->m_floatType);
-						pSrc++;
-					}
-					*/
 					printf("name: %s\n", pSubMeshDesc->m_name);
 				}
 			}
@@ -41,11 +28,24 @@ void Geometry1::DumpInfo(uint8_t* pMem)
 				printf("FILE %s\n", pMatDesc->m_materialFile);
 				printf("MATERIAL HASH %s\n", pMatDesc->m_materialHash);
 				*/
-				uint32_t cap = pMatDesc->field_38;
-				printf("[MatDump]|%s|%s|%s|%d|\n", pMatDesc->m_materialDebugName, pMatDesc->m_materialFile, pMatDesc->m_materialHash, cap);
-				for (uint32_t i = 0; i < cap; i++)
+				uint32_t numShaderFeatures = pMatDesc->m_numShaderFeatures;
+				printf("[MatDump]|%s|%s|%s|%d|\n", pMatDesc->m_materialDebugName, pMatDesc->m_materialFile, pMatDesc->m_materialHash, numShaderFeatures);
+				for (uint32_t i = 0; i < numShaderFeatures; i++)
 				{
-					printf("|%d| %s\n", i, pMatDesc->m_paUnknames[i]);
+					printf("|%d| %s\n", i, pMatDesc->m_apShaderFeatures[i]);
+				}
+				puts("Shader Variables");
+				for (uint32_t iShdrVar = 0; iShdrVar < pMatDesc->m_numShaderVariables; iShdrVar++)
+				{
+					printf("|%d|: %s\n", iShdrVar, pMatDesc->m_aShaderVariables[iShdrVar].m_variableName);
+				}
+				puts("Shader Texture");
+				ShaderTexture* pShaderTexture = pMatDesc->m_aShaderTextures;
+				for (uint32_t iShaderTexture = 0; iShaderTexture < pMatDesc->m_numShaderTextures; iShaderTexture++)
+				{
+					printf("|%d|: ", iShaderTexture);
+					printf("ShaderTextureName: %s\n     TextureName: %s\n     TextureFilePath: %s\n", pShaderTexture->m_shaderTextureName, pShaderTexture->m_textureName, pShaderTexture->m_pShaderTextureDesc->m_textureFilePath);
+					pShaderTexture++;
 				}
 				puts("-----------------");
 			}
